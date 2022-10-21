@@ -1,0 +1,22 @@
+{
+  "name": "chat",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/martinfacc/chat.git"
+  },
+  "author": "Martin Facciuto",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/martinfacc/chat/issues"
+  },
+  "homepage": "https://github.com/martinfacc/chat#readme"
+}
