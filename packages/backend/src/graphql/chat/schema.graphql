@@ -1,0 +1,9 @@
+type Chat {
+	id: ID!
+	users: [User!]!
+	messages: [Message!]!
+}
+
+type Query {
+	chat(id: ID!): Chat
+}

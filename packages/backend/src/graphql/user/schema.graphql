@@ -1,0 +1,13 @@
+type User {
+	id: ID!
+	username: String!
+	email: String!
+	password: String!
+	avatar: String
+	chats: [Chat]
+}
+
+type Query {
+	users: [User]
+	user(id: ID!): User
+}
