@@ -2,7 +2,8 @@ import dotenv from 'dotenv'
 dotenv.config()
 import { removeEmptyArgs } from '../../utils/graphql.js'
 import { hashPassword, comparePassword } from '../../utils/password.js'
-import { ajv, registerSchema, loginSchema } from './schema.js'
+import validateRegister from './../../../../shared/src/schemas/user/register.js'
+import validateLogin from './../../../../shared/src/schemas/user/login.js'
 import { UserInputError } from 'apollo-server'
 import jwt from 'jsonwebtoken'
 import { Op } from 'sequelize'
@@ -27,10 +28,11 @@ export default {
 			const { User } = context.models
 			const { username, password } = args
 
-			const validate = ajv.compile(loginSchema)
-			const valid = validate({ username, password })
+			const valid = validateLogin({ username, password })
 			if (!valid)
-				throw new UserInputError('Invalid input', { errors: validate.errors })
+				throw new UserInputError('Invalid input', {
+					errors: validateLogin.errors,
+				})
 
 			const user = await User.findOne({ where: { username } })
 			if (!user)
@@ -75,15 +77,15 @@ export default {
 			const { User } = context.models
 			const { username, email, password, confirmPassword } = args
 
-			const validate = ajv.compile(registerSchema)
-			const valid = validate(registerSchema, {
+			const valid = validateRegister({
 				username,
 				email,
 				password,
 				confirmPassword,
 			})
 
-			if (!valid) throw new UserInputError('Invalid input', validate.errors)
+			if (!valid)
+				throw new UserInputError('Invalid input', validateRegister.errors)
 
 			const findUserByUsername = await User.findOne({ where: { username } })
 			if (findUserByUsername)

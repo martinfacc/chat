@@ -1,5 +1,5 @@
 import React from 'react'
-import ChatContext from '@/contexts/chatContext.jsx'
+import ChatContext from '@/contexts/chatContext'
 
 const useChat = () => {
 	const { state, setState, currentChat, setChats } =

@@ -8,18 +8,9 @@ const emailRegex =
 	/^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/
 ajv.addFormat('email-format', emailRegex)
 
-const registerSchema = {
+const schema = {
 	type: 'object',
 	properties: {
-		username: {
-			type: 'string',
-			minLength: 3,
-			maxLength: 20,
-			errorMessage: {
-				minLength: 'Username must be at least 3 characters',
-				maxLength: 'Username must be at most 20 characters',
-			},
-		},
 		email: {
 			type: 'string',
 			format: 'email-format',
@@ -48,29 +39,4 @@ const registerSchema = {
 	required: ['username', 'email', 'password', 'confirmPassword'],
 }
 
-const loginSchema = {
-	type: 'object',
-	properties: {
-		username: {
-			type: 'string',
-			minLength: 3,
-			maxLength: 20,
-			errorMessage: {
-				minLength: 'Username must be at least 3 characters',
-				maxLength: 'Username must be at most 20 characters',
-			},
-		},
-		password: {
-			type: 'string',
-			minLength: 8,
-			maxLength: 20,
-			errorMessage: {
-				minLength: 'Password must be at least 8 characters',
-				maxLength: 'Password must be at most 20 characters',
-			},
-		},
-	},
-	required: ['username', 'password'],
-}
-
-export { ajv, registerSchema, loginSchema }
+export { ajv, schema }

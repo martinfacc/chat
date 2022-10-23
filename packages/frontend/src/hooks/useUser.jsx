@@ -6,13 +6,13 @@ import { removeStorageUser, setStorageUser } from '@/utils/user'
 
 const useUser = () => {
 	const { user, setUser } = React.useContext(UserContext)
-	const apolloClient = useApolloClient()
+	// const apolloClient = useApolloClient()
 
 	const logout = () => {
 		removeAuthToken()
 		removeStorageUser()
 		setUser(null)
-		apolloClient.resetStore()
+		// apolloClient.resetStore()
 	}
 
 	const login = (data) => {

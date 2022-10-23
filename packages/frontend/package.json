@@ -1,5 +1,5 @@
 {
-  "name": "frontend",
+  "name": "@chat/frontend",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,10 +9,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@apollo/client": "^3.7.0",
-    "@fontsource/dm-sans": "^4.5.9",
+    "@apollo/client": "3.7.0",
+    "@fontsource/dm-sans": "4.5.9",
+    "ajv": "8.11.0",
+    "ajv-errors": "3.0.0",
+    "class-names": "1.0.0",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "react-router-dom": "6.4.2",
+    "react-select": "5.5.4",
+    "styled-components": "5.3.6"
   },
   "devDependencies": {
     "@types/react": "18.0.17",

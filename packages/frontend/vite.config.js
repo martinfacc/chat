@@ -4,12 +4,15 @@ import path from 'path'
 
 const __dirname = path.resolve()
 
+console.log({ __dirname })
+
 // https://vitejs.dev/config/
 export default defineConfig({
 	plugins: [react()],
 	resolve: {
 		alias: {
 			'@': path.resolve(__dirname, 'src'),
+			'@shared': path.resolve(__dirname, '..', 'shared', 'src'),
 		},
 	},
 })

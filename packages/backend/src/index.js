@@ -14,6 +14,10 @@ import { app, server } from './app.js'
 // import errorHandler from './middlewares/errorHandler.js'
 // import notFound from './middlewares/notFound.js'
 import models from './models/index.js'
+// import validate from '@shared/schemas/user/register.js'
+
+import validate from './../../shared/src/schemas/user/register.js'
+console.log({ validate })
 
 // import { ApolloServer } from 'apollo-server'
 

@@ -2,6 +2,8 @@
 	"compilerOptions": {
 		"baseUrl": "./src",
 		"paths": {
+			"@backend/*": ["../backend/src/*"],
+			"@shared/*": ["./src/../../shared/src/*"],
 			"@/*": ["./src/*"],
 			"@/components/*": ["./components/*"],
 			"@/contexts/*": ["./contexts/*"],
