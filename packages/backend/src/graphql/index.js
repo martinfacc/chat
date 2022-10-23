@@ -37,10 +37,10 @@ const getResolvers = async () => {
 	arrayOfResolvers.forEach((resolver) => {
 		resolvers.Query = { ...resolvers.Query, ...resolver.Query }
 		resolvers.Mutation = { ...resolvers.Mutation, ...resolver.Mutation }
-		resolvers.Subscription = {
-			...resolvers.Subscription,
-			...resolver.Subscription,
-		}
+		// resolvers.Subscription = {
+		// 	...resolvers.Subscription,
+		// 	...resolver.Subscription,
+		// }
 
 		delete resolver.Query
 		delete resolver.Mutation
@@ -58,7 +58,7 @@ const makeSchema = async () => {
 		typeDefs,
 		resolvers,
 	})
-	return schema
+	return { schema, resolvers, typeDefs }
 }
 
 export default makeSchema

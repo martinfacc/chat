@@ -1,11 +1,11 @@
 type Message {
-	id: ID!
-	text: String!
-	timestamp: String!
-	userId: ID!
-	chatId: ID!
-	user: User!
-	chat: Chat!
+	id: ID
+	text: String
+	timestamp: String
+	userId: ID
+	chatId: ID
+	user: User
+	chat: Chat
 }
 
 type Query {
