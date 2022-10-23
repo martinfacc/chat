@@ -5,8 +5,10 @@ import { Row, Field, Input, InputWithSvgButton, SpanError } from '@/styles/Form'
 import { ButtonPrimary } from '@/styles/Button'
 import useModal from '@/hooks/useModal'
 import { ajv, schema } from './schema.js'
-// import authenticationServices from '@/services/authentication'
-import useUser from '@/hooks/useUser'
+import { LOGIN } from '@/queries/user'
+import { useLazyQuery } from '@apollo/client'
+// import useUser from '@/hooks/useUser'
+import useSpinner from '@/hooks/useSpinner'
 
 const Eye = () => (
 	<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
@@ -23,33 +25,42 @@ const EyeSlash = () => (
 const LoginPage = () => {
 	const [errors, setErrors] = React.useState({})
 	const { isOpen: showPassword, toggle } = useModal()
-	const { login } = useUser()
+	const spinner = useSpinner()
+	// const { login } = useUser()
+	const [login, { loading }] = useLazyQuery(LOGIN, {
+		onError: (error) => {
+			console.log({ error })
+		},
+		onCompleted: (data) => {
+			console.log({ data })
+		},
+	})
 
 	const handleSubmit = async (event) => {
 		event.preventDefault()
-		const formData = new FormData(event.currentTarget)
-		const data = Object.fromEntries(formData)
+		spinner.open()
+		try {
+			const formData = new FormData(event.currentTarget)
+			const data = Object.fromEntries(formData)
 
-		const validate = ajv.compile(schema)
-		validate(data)
+			const validate = ajv.compile(schema)
+			validate(data)
 
-		const currentErrors = {}
-		validate.errors?.forEach((error) => {
-			const { message, instancePath } = error
-			currentErrors[instancePath.slice(1)] = message
-		})
+			const currentErrors = {}
+			validate.errors?.forEach((error) => {
+				const { message, instancePath } = error
+				currentErrors[instancePath.slice(1)] = message
+			})
 
-		if (Object.keys(currentErrors).length === 0) {
-			// const response = await authenticationServices.login(
-			// 	data.email,
-			// 	data.password
-			// )
-			// if (response.status === 200) {
-			// 	login(response.data)
-			// }
+			if (Object.keys(currentErrors).length === 0) {
+				await login({ variables: { ...data } })
+			}
+			setErrors(currentErrors)
+		} catch (error) {
+			console.log({ error })
+		} finally {
+			spinner.close()
 		}
-
-		setErrors(currentErrors)
 	}
 
 	const className = (name) => classNames({ error: errors[name] })
@@ -85,7 +96,9 @@ const LoginPage = () => {
 							<SpanError>{errors.password || ''}</SpanError>
 						</label>
 					</Field>
-					<ButtonPrimary type="submit">Login</ButtonPrimary>
+					<ButtonPrimary type="submit" disabled={loading}>
+						Login
+					</ButtonPrimary>
 					<Anchor to="/auth/forgot-password">Forgot Password?</Anchor>
 				</Row>
 			</Form>

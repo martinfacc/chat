@@ -13,7 +13,8 @@
 			"@/plugins/*": ["./plugins/*"],
 			"@/styles/*": ["./styles/*"],
 			"@/config/*": ["./config/*"],
-			"@/queries/*": ["./queries/*"]
+			"@/queries/*": ["./queries/*"],
+			"@/mutations/*": ["./mutations/*"]
 		}
 	},
 	"exclude": ["node_modules", "build"]

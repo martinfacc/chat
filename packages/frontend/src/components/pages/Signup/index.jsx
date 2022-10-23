@@ -5,8 +5,10 @@ import { Row, Field, Input, InputWithSvgButton, SpanError } from '@/styles/Form'
 import { ButtonPrimary } from '@/styles/Button'
 import useModal from '@/hooks/useModal'
 import validate from '@shared/schemas/user/register.js'
-// import authenticationServices from '@/services/authentication'
-import useUser from '@/hooks/useUser'
+// import useUser from '@/hooks/useUser'
+import { REGISTER } from '@/mutations/user'
+import { useMutation } from '@apollo/client'
+import useSpinner from '@/hooks/useSpinner'
 
 const Eye = () => (
 	<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
@@ -22,34 +24,47 @@ const EyeSlash = () => (
 
 const SignupPage = () => {
 	const [errors, setErrors] = React.useState({})
+	const spinner = useSpinner()
 	const { isOpen: showPassword, toggle: togglePassword } = useModal()
-	const { login } = useUser()
+	const [register, { loading, error: err }] = useMutation(REGISTER, {
+		onCompleted: ({ register: { token } }) => {
+			console.log({ token })
+		},
+		onError: (error) => {
+			console.log({ error })
+			// setErrors(error.graphQLErrors[0].extensions)
+		},
+	})
+
+	console.log({ errors })
 
 	const handleSubmit = async (event) => {
 		event.preventDefault()
-		const formData = new FormData(event.currentTarget)
-		const data = Object.fromEntries(formData)
+		spinner.open()
+		try {
+			const formData = new FormData(event.currentTarget)
+			const data = Object.fromEntries(formData)
 
-		// const validate = ajv.compile(schema)
-		validate(data)
+			// const validate = ajv.compile(schema)
+			validate(data)
 
-		const currentErrors = {}
-		validate.errors?.forEach((error) => {
-			const { message, instancePath } = error
-			currentErrors[instancePath.slice(1)] = message
-		})
+			const currentErrors = {}
+			validate.errors?.forEach((error) => {
+				const { message, instancePath } = error
+				currentErrors[instancePath.slice(1)] = message
+			})
 
-		if (Object.keys(currentErrors).length === 0) {
-			// const response = await authenticationServices.login(
-			// 	data.email,
-			// 	data.password
-			// )
-			// if (response.status === 200) {
-			// 	login(response.data)
-			// }
+			if (Object.keys(currentErrors).length === 0) {
+				const variables = { ...data }
+				await register({ variables })
+			}
+
+			setErrors(currentErrors)
+		} catch (error) {
+			console.log(error)
+		} finally {
+			spinner.close()
 		}
-
-		setErrors(currentErrors)
 	}
 
 	const className = (name) => classNames({ error: errors[name] })
@@ -116,7 +131,9 @@ const SignupPage = () => {
 						</label>
 					</Field>
 
-					<ButtonPrimary type="submit">Register</ButtonPrimary>
+					<ButtonPrimary type="submit" disabled={loading}>
+						Register
+					</ButtonPrimary>
 				</Row>
 			</Form>
 		</Signup>
