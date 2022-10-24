@@ -26,18 +26,18 @@ export default {
 		},
 		login: async (parent, args, context) => {
 			const { User } = context.models
-			const { username, password } = args
+			const { email, password } = args
 
-			const valid = validateLogin({ username, password })
+			const valid = validateLogin({ email, password })
 			if (!valid)
 				throw new UserInputError('Invalid input', {
 					errors: validateLogin.errors,
 				})
 
-			const user = await User.findOne({ where: { username } })
+			const user = await User.findOne({ where: { email } })
 			if (!user)
 				throw new UserInputError('Invalid input', {
-					username: 'User not found',
+					email: 'User not found',
 				})
 
 			const passwordMatch = await comparePassword(password, user.password)

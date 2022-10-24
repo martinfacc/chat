@@ -3,13 +3,12 @@ import ajv from '../index.js'
 export const loginSchema = {
 	type: 'object',
 	properties: {
-		username: {
+		email: {
 			type: 'string',
-			minLength: 3,
-			maxLength: 20,
+			format: 'email-format',
 			errorMessage: {
-				minLength: 'Username must be at least 3 characters',
-				maxLength: 'Username must be at most 20 characters',
+				type: 'Email must be a string',
+				format: 'Email must be a valid email address',
 			},
 		},
 		password: {
@@ -22,7 +21,7 @@ export const loginSchema = {
 			},
 		},
 	},
-	required: ['username', 'password'],
+	required: ['email', 'password'],
 }
 
 const validate = ajv.compile(loginSchema)

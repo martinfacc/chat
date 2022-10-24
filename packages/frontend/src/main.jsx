@@ -13,6 +13,7 @@ import { getMainDefinition } from '@apollo/client/utilities'
 import { UserContextProvider } from '@/contexts/userContext'
 import { ChatContextProvider } from '@/contexts/chatContext'
 import { SpinnerContextProvider } from '@/contexts/spinnerContext'
+import { ToastContextProvider } from '@/contexts/toastContext'
 import GlobalStyles from '@/styles/GlobalStyles'
 import { getAuthToken } from '@/utils/authentication'
 import App from './App'
@@ -75,10 +76,12 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 		<UserContextProvider>
 			<React.StrictMode>
 				<SpinnerContextProvider>
-					<ChatContextProvider>
-						<App />
-						<GlobalStyles />
-					</ChatContextProvider>
+					<ToastContextProvider>
+						<ChatContextProvider>
+							<App />
+							<GlobalStyles />
+						</ChatContextProvider>
+					</ToastContextProvider>
 				</SpinnerContextProvider>
 			</React.StrictMode>
 		</UserContextProvider>

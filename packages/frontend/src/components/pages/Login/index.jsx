@@ -4,11 +4,12 @@ import { Login, Form, Anchor } from './styles'
 import { Row, Field, Input, InputWithSvgButton, SpanError } from '@/styles/Form'
 import { ButtonPrimary } from '@/styles/Button'
 import useModal from '@/hooks/useModal'
-import { ajv, schema } from './schema.js'
+import validate from '@shared/schemas/user/login.js'
 import { LOGIN } from '@/queries/user'
 import { useLazyQuery } from '@apollo/client'
 // import useUser from '@/hooks/useUser'
 import useSpinner from '@/hooks/useSpinner'
+import useToast from '@/hooks/useToast'
 
 const Eye = () => (
 	<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
@@ -26,6 +27,7 @@ const LoginPage = () => {
 	const [errors, setErrors] = React.useState({})
 	const { isOpen: showPassword, toggle } = useModal()
 	const spinner = useSpinner()
+	const { addSuccessToast, addErrorToast } = useToast()
 	// const { login } = useUser()
 	const [login, { loading }] = useLazyQuery(LOGIN, {
 		onError: (error) => {
@@ -43,7 +45,6 @@ const LoginPage = () => {
 			const formData = new FormData(event.currentTarget)
 			const data = Object.fromEntries(formData)
 
-			const validate = ajv.compile(schema)
 			validate(data)
 
 			const currentErrors = {}
@@ -52,12 +53,16 @@ const LoginPage = () => {
 				currentErrors[instancePath.slice(1)] = message
 			})
 
-			if (Object.keys(currentErrors).length === 0) {
-				await login({ variables: { ...data } })
-			}
 			setErrors(currentErrors)
+
+			if (Object.keys(currentErrors).length === 0) {
+				const response = await login({ variables: { ...data } })
+				if (response.error) throw new Error(response.error)
+				addSuccessToast('Login successful')
+			}
 		} catch (error) {
 			console.log({ error })
+			addErrorToast('Login failed')
 		} finally {
 			spinner.close()
 		}

@@ -1,6 +1,7 @@
 import React from 'react'
 import { Routes, Route } from 'react-router-dom'
 import { Default } from './styles'
+import useToast from '@/hooks/useToast'
 // import Header from '@/components/Header'
 // import Main from '@/components/Main'
 // import Footer from '@/components/Footer'
@@ -19,6 +20,8 @@ import { Default } from './styles'
 // import { useNavigate } from 'react-router-dom'
 
 const DefaultLayout = () => {
+	const { addToast } = useToast()
+
 	// const { user } = useUser()
 	// const navigate = useNavigate()
 
@@ -28,6 +31,56 @@ const DefaultLayout = () => {
 
 	return (
 		<Default>
+			<button
+				onClick={() => {
+					addToast({
+						type: 'success',
+						message: 'Teste de toast, Teste de toast. Teste de toast',
+					})
+				}}
+			>
+				Add toast
+			</button>
+			<button
+				onClick={() => {
+					addToast({
+						type: 'info',
+						message: 'Teste de toast, Teste de toast. Teste de toast',
+					})
+				}}
+			>
+				Add toast info
+			</button>
+			<button
+				onClick={() => {
+					addToast({
+						type: 'danger',
+						message: 'Teste de toast, Teste de toast. Teste de toast',
+					})
+				}}
+			>
+				Add toast danger
+			</button>
+			<button
+				onClick={() => {
+					addToast({
+						type: 'warning',
+						message: 'Teste de toast, Teste de toast. Teste de toast',
+					})
+				}}
+			>
+				Add toast warning
+			</button>
+			<button
+				onClick={() => {
+					addToast({
+						type: 'primary',
+						message: 'Teste de toast, Teste de toast. Teste de toast',
+					})
+				}}
+			>
+				Add toast primary
+			</button>
 			{/* <Header />
 			<section className="main">
 				<Main>
